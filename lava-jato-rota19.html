@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lava Jato & Estética Automotiva ROTA19 — Sistema de Gestão</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0A0906;
+    --surface:#161310;
+    --surface-2:#1E1A10;
+    --surface-3:#272014;
+    --edge:#4A3D18;
+    --edge-soft:#241E10;
+    --aqua:#D4AF37;
+    --aqua-dim:#9C7C22;
+    --amber:#E0923C;
+    --green:#67D08B;
+    --red:#EF6F60;
+    --text:#F6F2E7;
+    --text-dim:#C7BC9C;
+    --text-faint:#6E6650;
+    --radius:10px;
+    --shadow:0 8px 24px rgba(0,0,0,0.35);
+    font-size:16px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(1200px 600px at 15% -10%, rgba(212,175,55,0.10), transparent 60%),
+      radial-gradient(900px 500px at 110% 10%, rgba(255,255,255,0.04), transparent 55%),
+      var(--bg);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    min-height:100vh;
+    padding-bottom:60px;
+  }
+  h1,h2,h3,.display{
+    font-family:'Barlow Condensed',sans-serif;
+    letter-spacing:0.02em;
+    font-weight:800;
+    text-transform:uppercase;
+  }
+  .mono{font-family:'JetBrains Mono',monospace;}
+
+  /* ---------- HEADER ---------- */
+  .app-header{
+    background:linear-gradient(180deg, var(--surface-3), var(--surface-2));
+    border-bottom:1px solid var(--edge);
+    padding:22px 28px 34px;
+    position:relative;
+  }
+  .header-inner{
+    max-width:1080px;margin:0 auto;
+    display:flex;align-items:center;justify-content:space-between;
+    gap:20px;flex-wrap:wrap;
+  }
+  .brand{display:flex;align-items:center;gap:14px;}
+  .brand-icon{
+    width:52px;height:52px;flex-shrink:0;
+    background:radial-gradient(circle at 30% 25%, #F0D888, var(--aqua-dim));
+    border-radius:14px;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 4px 14px rgba(212,175,55,0.3), inset 0 -3px 6px rgba(0,0,0,0.3);
+  }
+  .brand-icon svg{width:30px;height:30px;}
+  .brand-text h1{font-size:23px;line-height:1.15;margin:0;color:var(--text);}
+  .brand-text p{margin:4px 0 0;font-size:13px;color:var(--text-dim);letter-spacing:0.08em;text-transform:uppercase;font-weight:600;}
+
+  .saldo-box{
+    background:#0E0B05;
+    border:1px solid var(--edge);
+    border-radius:12px;
+    padding:10px 20px;
+    text-align:right;
+    box-shadow:inset 0 2px 8px rgba(0,0,0,0.5);
+  }
+  .saldo-box .label{font-size:11px;text-transform:uppercase;letter-spacing:0.12em;color:var(--text-faint);font-weight:600;}
+  .saldo-box .valor{
+    font-size:28px;font-weight:700;color:var(--aqua);
+    text-shadow:0 0 14px rgba(212,175,55,0.5);
+    white-space:nowrap;
+  }
+  .saldo-box .valor.neg{color:var(--red);text-shadow:0 0 14px rgba(239,111,96,0.5);}
+
+  .wave{
+    position:absolute;left:0;right:0;bottom:-1px;height:26px;
+    background:var(--bg);
+    -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 60' preserveAspectRatio='none'%3E%3Cpath d='M0,30 C150,60 350,0 600,25 C850,50 1050,5 1200,30 L1200,60 L0,60 Z'/%3E%3C/svg%3E") center/100% 100%;
+    mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 60' preserveAspectRatio='none'%3E%3Cpath d='M0,30 C150,60 350,0 600,25 C850,50 1050,5 1200,30 L1200,60 L0,60 Z'/%3E%3C/svg%3E") center/100% 100%;
+  }
+
+  /* ---------- NAV ---------- */
+  .tabs{
+    max-width:1080px;margin:22px auto 0;
+    display:flex;gap:8px;padding:0 28px;
+    flex-wrap:wrap;
+  }
+  .tab-btn{
+    background:var(--surface);
+    border:1px solid var(--edge-soft);
+    color:var(--text-dim);
+    font-family:'Barlow Condensed',sans-serif;
+    font-weight:700;
+    font-size:16px;
+    text-transform:uppercase;
+    letter-spacing:0.04em;
+    padding:10px 20px;
+    border-radius:9px;
+    cursor:pointer;
+    transition:all .15s ease;
+    display:flex;align-items:center;gap:8px;
+  }
+  .tab-btn:hover{border-color:var(--aqua-dim);color:var(--text);}
+  .tab-btn.active{
+    background:var(--aqua);
+    color:#0E0B05;
+    border-color:var(--aqua);
+    box-shadow:0 4px 14px rgba(212,175,55,0.28);
+  }
+
+  main{max-width:1080px;margin:0 auto;padding:22px 28px 0;}
+  .panel{display:none;}
+  .panel.active{display:block;animation:fade .25s ease;}
+  @keyframes fade{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+
+  .section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;}
+  .section-head h2{font-size:24px;margin:0;color:var(--text);}
+  .section-head .sub{font-size:13px;color:var(--text-dim);margin-top:2px;font-family:'Inter',sans-serif;font-weight:400;text-transform:none;letter-spacing:0;}
+
+  /* ---------- BUTTONS ---------- */
+  button{font-family:'Inter',sans-serif;}
+  .btn{
+    border:1px solid var(--edge);
+    background:var(--surface);
+    color:var(--text);
+    padding:9px 16px;
+    border-radius:8px;
+    font-size:14px;
+    font-weight:600;
+    cursor:pointer;
+    transition:all .15s ease;
+  }
+  .btn:hover{border-color:var(--aqua-dim);}
+  .btn-primary{background:var(--aqua);border-color:var(--aqua);color:#0E0B05;}
+  .btn-primary:hover{background:#5adde3;}
+  .btn-ghost{background:transparent;border-color:transparent;color:var(--text-dim);padding:6px 8px;}
+  .btn-ghost:hover{color:var(--text);}
+  .btn-danger{color:var(--red);}
+  .btn-sm{padding:5px 10px;font-size:12.5px;}
+
+  /* ---------- CARDS (dashboard) ---------- */
+  .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-bottom:26px;}
+  .stat-card{
+    background:var(--surface);
+    border:1px solid var(--edge-soft);
+    border-radius:var(--radius);
+    padding:16px 18px;
+  }
+  .stat-card .label{font-size:12px;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-dim);font-weight:600;margin-bottom:8px;}
+  .stat-card .value{font-size:26px;font-weight:700;font-family:'JetBrains Mono',monospace;}
+  .stat-card .value.aqua{color:var(--aqua);}
+  .stat-card .value.green{color:var(--green);}
+  .stat-card .value.red{color:var(--red);}
+  .stat-card .value.amber{color:var(--amber);}
+  .stat-card .foot{font-size:12px;color:var(--text-faint);margin-top:6px;}
+
+  .two-col{display:grid;grid-template-columns:1.3fr 1fr;gap:16px;}
+  @media(max-width:760px){.two-col{grid-template-columns:1fr;}}
+
+  .card{
+    background:var(--surface);
+    border:1px solid var(--edge-soft);
+    border-radius:var(--radius);
+    padding:18px;
+  }
+  .card h3{font-size:17px;margin:0 0 12px;color:var(--text);}
+  .mini-row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--edge-soft);font-size:14px;}
+  .mini-row:last-child{border-bottom:none;}
+  .mini-row .d{color:var(--text-dim);font-size:12.5px;}
+  .empty{color:var(--text-faint);font-size:13.5px;padding:14px 0;text-align:center;}
+
+  .tag{
+    display:inline-block;padding:2px 9px;border-radius:20px;
+    font-size:11.5px;font-weight:600;text-transform:uppercase;letter-spacing:0.04em;
+  }
+  .tag.ok{background:rgba(103,208,139,0.15);color:var(--green);}
+  .tag.warn{background:rgba(244,183,64,0.16);color:var(--amber);}
+  .tag.bad{background:rgba(239,111,96,0.16);color:var(--red);}
+
+  /* ---------- FORMS ---------- */
+  .form-card{
+    background:var(--surface-2);
+    border:1px solid var(--edge);
+    border-radius:var(--radius);
+    padding:18px;
+    margin-bottom:20px;
+    display:none;
+  }
+  .form-card.open{display:block;}
+  .form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;}
+  .field label{display:block;font-size:12px;color:var(--text-dim);margin-bottom:5px;font-weight:600;text-transform:uppercase;letter-spacing:0.04em;}
+  .field input, .field select{
+    width:100%;padding:9px 10px;border-radius:7px;
+    border:1px solid var(--edge);background:#171209;color:var(--text);
+    font-size:14px;font-family:'Inter',sans-serif;
+  }
+  .field input:focus, .field select:focus{outline:none;border-color:var(--aqua);}
+  .form-actions{display:flex;gap:10px;margin-top:16px;}
+
+  .type-toggle{display:flex;gap:8px;margin-bottom:14px;}
+  .type-toggle button{
+    flex:1;padding:10px;border-radius:8px;border:1px solid var(--edge);
+    background:#171209;color:var(--text-dim);font-weight:700;cursor:pointer;
+    font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;letter-spacing:0.04em;font-size:15px;
+  }
+  .type-toggle button.sel-in{background:rgba(103,208,139,0.15);color:var(--green);border-color:var(--green);}
+  .type-toggle button.sel-out{background:rgba(239,111,96,0.15);color:var(--red);border-color:var(--red);}
+
+  /* ---------- TABLES ---------- */
+  table{width:100%;border-collapse:collapse;font-size:14px;}
+  thead th{
+    text-align:left;font-size:11.5px;text-transform:uppercase;letter-spacing:0.06em;
+    color:var(--text-faint);padding:8px 10px;border-bottom:1px solid var(--edge);font-weight:700;
+  }
+  tbody td{padding:11px 10px;border-bottom:1px solid var(--edge-soft);color:var(--text);vertical-align:middle;}
+  tbody tr:hover{background:rgba(255,255,255,0.02);}
+  tbody tr.low-stock{background:rgba(244,183,64,0.06);}
+  tbody tr.out-stock{background:rgba(239,111,96,0.08);}
+  .num{font-family:'JetBrains Mono',monospace;}
+  .in-val{color:var(--green);font-weight:700;}
+  .out-val{color:var(--red);font-weight:700;}
+  .table-wrap{overflow-x:auto;background:var(--surface);border:1px solid var(--edge-soft);border-radius:var(--radius);}
+  .table-wrap table{min-width:560px;}
+
+  .filter-row{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;}
+  .filter-row button{
+    padding:6px 14px;border-radius:20px;border:1px solid var(--edge);background:var(--surface);
+    color:var(--text-dim);font-size:12.5px;font-weight:600;cursor:pointer;
+  }
+  .filter-row button.active{background:var(--aqua);border-color:var(--aqua);color:#0E0B05;}
+
+  footer{text-align:center;color:var(--text-faint);font-size:12px;padding:40px 20px 10px;}
+  .config-screen{
+    max-width:520px;margin:80px auto;padding:28px;
+    background:var(--surface);border:1px solid var(--edge);border-radius:var(--radius);
+  }
+  .config-screen h2{font-size:22px;margin:0 0 10px;}
+  .config-screen p{font-size:14px;color:var(--text-dim);line-height:1.6;}
+  .config-screen code{background:#0E0B05;padding:2px 6px;border-radius:5px;font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--amber);}
+  .conn-error{
+    background:rgba(239,111,96,0.1);border:1px solid var(--red);color:var(--red);
+    padding:12px 16px;border-radius:8px;font-size:13.5px;margin-bottom:16px;
+  }
+</style>
+</head>
+<body>
+
+<div id="config-screen" class="config-screen" style="display:none;">
+  <h2>Conectar ao Supabase</h2>
+  <p id="config-msg">Para usar o sistema, abra o arquivo <code>lava-jato-rota19.html</code> em um editor de texto e, perto do topo do bloco <code>&lt;script&gt;</code>, preencha as duas constantes:</p>
+  <p><code>const SUPABASE_URL = "https://SEU-PROJETO.supabase.co";</code><br>
+  <code>const SUPABASE_ANON_KEY = "sua-chave-anon-aqui";</code></p>
+  <p>Essas informações ficam em <strong>Project Settings → API</strong> no painel do Supabase. Depois de salvar, é só recarregar esta página.</p>
+</div>
+
+<div id="app-content" style="display:none;">
+<header class="app-header" id="app-header">
+  <div class="header-inner">
+    <div class="brand">
+      <div class="brand-icon">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 16.5L4.2 12.8C4.5 11.9 5.3 11.3 6.3 11.3H17.7C18.7 11.3 19.5 11.9 19.8 12.8L21 16.5" stroke="#0E0B05" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M4 16.5H20V19C20 19.6 19.6 20 19 20H18C17.4 20 17 19.6 17 19V18H7V19C7 19.6 6.6 20 6 20H5C4.4 20 4 19.6 4 19V16.5Z" stroke="#0E0B05" stroke-width="1.6" stroke-linejoin="round"/>
+          <circle cx="7.5" cy="16.3" r="0.9" fill="#0E0B05"/>
+          <circle cx="16.5" cy="16.3" r="0.9" fill="#0E0B05"/>
+          <path d="M7 11.3L8.5 8.3C8.9 7.5 9.7 7 10.6 7H13.4C14.3 7 15.1 7.5 15.5 8.3L17 11.3" stroke="#0E0B05" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M2 8.5C2.5 7.5 3.5 7.5 4 8.5" stroke="#0E0B05" stroke-width="1.3" stroke-linecap="round"/>
+          <path d="M20 8.5C20.5 7.5 21.5 7.5 22 8.5" stroke="#0E0B05" stroke-width="1.3" stroke-linecap="round"/>
+          <path d="M11 4C11.5 3 12.5 3 13 4" stroke="#0E0B05" stroke-width="1.3" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <h1>Lava Jato &amp; Estética Automotiva ROTA19</h1>
+        <p>Sistema de gestão</p>
+      </div>
+    </div>
+    <div class="saldo-box">
+      <div class="label">Saldo em caixa</div>
+      <div class="valor mono" id="header-saldo">R$ 0,00</div>
+    </div>
+  </div>
+  <div class="wave"></div>
+</header>
+
+<nav class="tabs">
+  <button class="tab-btn active" data-tab="painel">Painel</button>
+  <button class="tab-btn" data-tab="servicos">Serviços</button>
+  <button class="tab-btn" data-tab="produtos">Produtos</button>
+  <button class="tab-btn" data-tab="caixa">Caixa</button>
+</nav>
+
+<main>
+
+  <!-- PAINEL -->
+  <section class="panel active" id="panel-painel">
+    <div class="section-head">
+      <div>
+        <h2>Painel</h2>
+        <div class="sub">Resumo do dia e da operação</div>
+      </div>
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="label">Saldo total em caixa</div>
+        <div class="value aqua mono" id="st-saldo">R$ 0,00</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Entradas hoje</div>
+        <div class="value green mono" id="st-entradas-hoje">R$ 0,00</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Saídas hoje</div>
+        <div class="value red mono" id="st-saidas-hoje">R$ 0,00</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Alertas de estoque</div>
+        <div class="value amber mono" id="st-alertas">0</div>
+        <div class="foot">produtos no mínimo ou zerados</div>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="card">
+        <h3>Últimas movimentações</h3>
+        <div id="dash-mov"></div>
+      </div>
+      <div class="card">
+        <h3>Estoque para repor</h3>
+        <div id="dash-estoque"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICOS -->
+  <section class="panel" id="panel-servicos">
+    <div class="section-head">
+      <div>
+        <h2>Serviços</h2>
+        <div class="sub">Tabela de preços do lava jato</div>
+      </div>
+      <button class="btn btn-primary" id="btn-toggle-servico-form">+ Novo serviço</button>
+    </div>
+
+    <div class="form-card" id="form-servico">
+      <div class="form-grid">
+        <div class="field" style="grid-column:1/3;">
+          <label>Nome do serviço</label>
+          <input type="text" id="sv-nome" placeholder="Ex: Lavagem completa">
+        </div>
+        <div class="field">
+          <label>Categoria</label>
+          <select id="sv-categoria">
+            <option>Carro</option>
+            <option>Moto</option>
+            <option>Caminhonete/SUV</option>
+            <option>Outro</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Preço (R$)</label>
+          <input type="number" id="sv-preco" step="0.01" min="0" placeholder="0,00">
+        </div>
+        <div class="field">
+          <label>Duração (min)</label>
+          <input type="number" id="sv-duracao" min="0" placeholder="30">
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-primary" id="btn-salvar-servico">Salvar serviço</button>
+        <button class="btn" id="btn-cancelar-servico">Cancelar</button>
+      </div>
+      <input type="hidden" id="sv-editid">
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Serviço</th><th>Categoria</th><th>Duração</th><th>Preço</th><th></th></tr></thead>
+        <tbody id="tbl-servicos"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- PRODUTOS -->
+  <section class="panel" id="panel-produtos">
+    <div class="section-head">
+      <div>
+        <h2>Produtos</h2>
+        <div class="sub">Insumos e itens de revenda em estoque</div>
+      </div>
+      <button class="btn btn-primary" id="btn-toggle-produto-form">+ Novo produto</button>
+    </div>
+
+    <div class="form-card" id="form-produto">
+      <div class="form-grid">
+        <div class="field" style="grid-column:1/3;">
+          <label>Nome do produto</label>
+          <input type="text" id="pd-nome" placeholder="Ex: Cera automotiva">
+        </div>
+        <div class="field">
+          <label>Categoria</label>
+          <select id="pd-categoria">
+            <option>Insumo de limpeza</option>
+            <option>Revenda</option>
+            <option>Outro</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Estoque atual</label>
+          <input type="number" id="pd-estoque" min="0" placeholder="0">
+        </div>
+        <div class="field">
+          <label>Estoque mínimo</label>
+          <input type="number" id="pd-minimo" min="0" placeholder="0">
+        </div>
+        <div class="field">
+          <label>Preço de custo (R$)</label>
+          <input type="number" id="pd-custo" step="0.01" min="0" placeholder="0,00">
+        </div>
+        <div class="field">
+          <label>Preço de venda (opcional)</label>
+          <input type="number" id="pd-venda" step="0.01" min="0" placeholder="0,00">
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-primary" id="btn-salvar-produto">Salvar produto</button>
+        <button class="btn" id="btn-cancelar-produto">Cancelar</button>
+      </div>
+      <input type="hidden" id="pd-editid">
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Produto</th><th>Categoria</th><th>Estoque</th><th>Custo</th><th>Venda</th><th></th></tr></thead>
+        <tbody id="tbl-produtos"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- CAIXA -->
+  <section class="panel" id="panel-caixa">
+    <div class="section-head">
+      <div>
+        <h2>Caixa</h2>
+        <div class="sub">Entradas e saídas do dia a dia</div>
+      </div>
+      <button class="btn btn-primary" id="btn-toggle-caixa-form">+ Nova movimentação</button>
+    </div>
+
+    <div class="form-card" id="form-caixa">
+      <div class="type-toggle">
+        <button type="button" id="tt-entrada" class="sel-in">Entrada</button>
+        <button type="button" id="tt-saida">Saída</button>
+      </div>
+      <div class="form-grid">
+        <div class="field">
+          <label>Data</label>
+          <input type="date" id="cx-data">
+        </div>
+        <div class="field" style="grid-column:span 2;">
+          <label>Descrição</label>
+          <input type="text" id="cx-descricao" placeholder="Ex: Lavagem - Corolla prata">
+        </div>
+        <div class="field" id="cx-servico-wrap">
+          <label>Vincular a um serviço</label>
+          <select id="cx-servico"><option value="">Nenhum</option></select>
+        </div>
+        <div class="field">
+          <label>Categoria</label>
+          <select id="cx-categoria"></select>
+        </div>
+        <div class="field">
+          <label>Forma de pagamento</label>
+          <select id="cx-forma">
+            <option>Dinheiro</option>
+            <option>Pix</option>
+            <option>Cartão de débito</option>
+            <option>Cartão de crédito</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Valor (R$)</label>
+          <input type="number" id="cx-valor" step="0.01" min="0" placeholder="0,00">
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-primary" id="btn-salvar-caixa">Registrar</button>
+        <button class="btn" id="btn-cancelar-caixa">Cancelar</button>
+      </div>
+    </div>
+
+    <div class="filter-row">
+      <button class="active" data-filter="hoje">Hoje</button>
+      <button data-filter="7">7 dias</button>
+      <button data-filter="30">30 dias</button>
+      <button data-filter="tudo">Tudo</button>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Data</th><th>Descrição</th><th>Categoria</th><th>Forma</th><th>Valor</th><th></th></tr></thead>
+        <tbody id="tbl-caixa"></tbody>
+      </table>
+    </div>
+  </section>
+
+</main>
+
+<footer>Lava Jato &amp; Estética Automotiva ROTA19 — dados sincronizados com o Supabase.</footer>
+</div>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script>
+(function(){
+  // ======= CONFIGURAÇÃO DO SUPABASE =======
+  // Cole aqui a URL e a chave "anon public" do seu projeto
+  // (Supabase → Project Settings → API)
+  const SUPABASE_URL = "https://SEU-PROJETO.supabase.co";
+  const SUPABASE_ANON_KEY = "SUA-CHAVE-ANON-AQUI";
+  // ==========================================
+
+  var servicos = [];
+  var produtos = [];
+  var caixa = [];
+  var caixaFiltro = 'hoje';
+  var sb = null;
+
+  function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+  function hoje(){ return new Date().toISOString().slice(0,10); }
+  function brl(v){
+    v = Number(v)||0;
+    return 'R$ ' + v.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
+  }
+  function dataBR(iso){
+    if(!iso) return '';
+    var p = iso.split('-');
+    return p[2] + '/' + p[1] + '/' + p[0];
+  }
+
+  var CATEGORIAS_ENTRADA = ['Serviço','Venda de produto','Outro'];
+  var CATEGORIAS_SAIDA = ['Insumos/Produtos','Manutenção','Água/Energia','Salário','Outro'];
+
+  function mostrarTelaConfig(msg){
+    document.getElementById('config-msg').innerHTML = msg;
+    document.getElementById('config-screen').style.display = 'block';
+    document.getElementById('app-content').style.display = 'none';
+  }
+
+  function estaConfigurado(){
+    return SUPABASE_URL.indexOf('SEU-PROJETO') === -1 && SUPABASE_ANON_KEY.indexOf('SUA-CHAVE') === -1
+      && SUPABASE_URL.trim() !== '' && SUPABASE_ANON_KEY.trim() !== '';
+  }
+
+  // ---------- MAPEAMENTO DE LINHAS (snake_case do banco -> camelCase do app) ----------
+  function mapServico(r){ return {id:r.id, nome:r.nome, categoria:r.categoria, preco:Number(r.preco)||0, duracao:r.duracao||0}; }
+  function mapProduto(r){ return {id:r.id, nome:r.nome, categoria:r.categoria, estoque:r.estoque||0, minimo:r.minimo||0, custo:Number(r.custo)||0, venda:Number(r.venda)||0}; }
+  function mapCaixa(r){ return {id:r.id, tipo:r.tipo, data:r.data, descricao:r.descricao, categoria:r.categoria, forma:r.forma, valor:Number(r.valor)||0, servicoId:r.servico_id}; }
+
+  async function init(){
+    if(!estaConfigurado()){
+      mostrarTelaConfig('Para usar o sistema, abra o arquivo <code>lava-jato-rota19.html</code> em um editor de texto e preencha <code>SUPABASE_URL</code> e <code>SUPABASE_ANON_KEY</code> perto do topo do bloco &lt;script&gt;. Essas informações ficam em <strong>Project Settings → API</strong> no painel do Supabase. Depois de salvar, recarregue esta página.');
+      return;
+    }
+    if(typeof window.supabase === 'undefined'){
+      mostrarTelaConfig('Não foi possível carregar a biblioteca do Supabase. Verifique sua conexão com a internet e recarregue a página.');
+      return;
+    }
+    sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    document.getElementById('cx-data').value = hoje();
+
+    var ok = await carregarTudo();
+    if(!ok) return;
+
+    document.getElementById('config-screen').style.display = 'none';
+    document.getElementById('app-content').style.display = 'block';
+
+    renderAll();
+    setupTabs();
+    setupServicoForm();
+    setupProdutoForm();
+    setupCaixaForm();
+  }
+
+  async function carregarTudo(){
+    try{
+      var rs = await sb.from('servicos').select('*').order('nome');
+      if(rs.error) throw rs.error;
+      servicos = rs.data.map(mapServico);
+
+      var rp = await sb.from('produtos').select('*').order('nome');
+      if(rp.error) throw rp.error;
+      produtos = rp.data.map(mapProduto);
+
+      var rc = await sb.from('caixa').select('*').order('data', {ascending:false});
+      if(rc.error) throw rc.error;
+      caixa = rc.data.map(mapCaixa);
+
+      return true;
+    }catch(e){
+      console.error(e);
+      mostrarTelaConfig('Não foi possível conectar ao Supabase: <code>' + escapeHtml((e && e.message) || 'erro desconhecido') + '</code>. Confira se a URL e a chave estão corretas e se você rodou o script SQL que cria as tabelas <code>servicos</code>, <code>produtos</code> e <code>caixa</code>.');
+      return false;
+    }
+  }
+
+  function renderAll(){
+    renderServicos();
+    renderProdutos();
+    renderCaixa();
+    renderDashboard();
+  }
+
+  // ---------- TABS ----------
+  function setupTabs(){
+    var btns = document.querySelectorAll('.tab-btn');
+    btns.forEach(function(b){
+      b.addEventListener('click', function(){
+        btns.forEach(function(x){ x.classList.remove('active'); });
+        b.classList.add('active');
+        document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('active'); });
+        document.getElementById('panel-' + b.dataset.tab).classList.add('active');
+        if(b.dataset.tab === 'painel') renderDashboard();
+      });
+    });
+  }
+
+  // ---------- SERVICOS ----------
+  function setupServicoForm(){
+    var form = document.getElementById('form-servico');
+    document.getElementById('btn-toggle-servico-form').addEventListener('click', function(){
+      resetServicoForm();
+      form.classList.toggle('open');
+    });
+    document.getElementById('btn-cancelar-servico').addEventListener('click', function(){
+      form.classList.remove('open');
+    });
+    document.getElementById('btn-salvar-servico').addEventListener('click', async function(){
+      var nome = document.getElementById('sv-nome').value.trim();
+      var categoria = document.getElementById('sv-categoria').value;
+      var preco = parseFloat(document.getElementById('sv-preco').value) || 0;
+      var duracao = parseInt(document.getElementById('sv-duracao').value) || 0;
+      var editId = document.getElementById('sv-editid').value;
+      if(!nome){ alert('Informe o nome do serviço.'); return; }
+
+      var btn = this; btn.disabled = true;
+      try{
+        if(editId){
+          var r = await sb.from('servicos').update({nome:nome, categoria:categoria, preco:preco, duracao:duracao}).eq('id', editId).select().single();
+          if(r.error) throw r.error;
+          var item = servicos.find(function(x){ return x.id === editId; });
+          if(item) Object.assign(item, mapServico(r.data));
+        } else {
+          var r2 = await sb.from('servicos').insert({nome:nome, categoria:categoria, preco:preco, duracao:duracao}).select().single();
+          if(r2.error) throw r2.error;
+          servicos.push(mapServico(r2.data));
+        }
+        resetServicoForm();
+        form.classList.remove('open');
+        renderServicos();
+        populaSelectServicos();
+        renderDashboard();
+      }catch(e){
+        alert('Erro ao salvar serviço: ' + ((e && e.message) || 'tente novamente.'));
+      }finally{
+        btn.disabled = false;
+      }
+    });
+  }
+  function resetServicoForm(){
+    document.getElementById('sv-nome').value='';
+    document.getElementById('sv-categoria').value='Carro';
+    document.getElementById('sv-preco').value='';
+    document.getElementById('sv-duracao').value='';
+    document.getElementById('sv-editid').value='';
+  }
+  function editarServico(id){
+    var item = servicos.find(function(x){ return x.id === id; });
+    if(!item) return;
+    document.getElementById('sv-nome').value = item.nome;
+    document.getElementById('sv-categoria').value = item.categoria;
+    document.getElementById('sv-preco').value = item.preco;
+    document.getElementById('sv-duracao').value = item.duracao;
+    document.getElementById('sv-editid').value = item.id;
+    document.getElementById('form-servico').classList.add('open');
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+  async function excluirServico(id){
+    if(!confirm('Excluir este serviço?')) return;
+    try{
+      var r = await sb.from('servicos').delete().eq('id', id);
+      if(r.error) throw r.error;
+      servicos = servicos.filter(function(x){ return x.id !== id; });
+      renderServicos();
+      populaSelectServicos();
+      renderDashboard();
+    }catch(e){
+      alert('Erro ao excluir: ' + ((e && e.message) || 'tente novamente.'));
+    }
+  }
+  function renderServicos(){
+    var tbody = document.getElementById('tbl-servicos');
+    if(servicos.length === 0){
+      tbody.innerHTML = '<tr><td colspan="5" class="empty">Nenhum serviço cadastrado ainda.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = servicos.map(function(s){
+      return '<tr>' +
+        '<td>' + escapeHtml(s.nome) + '</td>' +
+        '<td>' + escapeHtml(s.categoria) + '</td>' +
+        '<td class="num">' + (s.duracao||0) + ' min</td>' +
+        '<td class="num">' + brl(s.preco) + '</td>' +
+        '<td style="text-align:right;white-space:nowrap;">' +
+          '<button class="btn btn-ghost btn-sm" onclick="LJ.editarServico(\'' + s.id + '\')">Editar</button>' +
+          '<button class="btn btn-ghost btn-sm btn-danger" onclick="LJ.excluirServico(\'' + s.id + '\')">Excluir</button>' +
+        '</td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  // ---------- PRODUTOS ----------
+  function setupProdutoForm(){
+    var form = document.getElementById('form-produto');
+    document.getElementById('btn-toggle-produto-form').addEventListener('click', function(){
+      resetProdutoForm();
+      form.classList.toggle('open');
+    });
+    document.getElementById('btn-cancelar-produto').addEventListener('click', function(){
+      form.classList.remove('open');
+    });
+    document.getElementById('btn-salvar-produto').addEventListener('click', async function(){
+      var nome = document.getElementById('pd-nome').value.trim();
+      var categoria = document.getElementById('pd-categoria').value;
+      var estoque = parseInt(document.getElementById('pd-estoque').value) || 0;
+      var minimo = parseInt(document.getElementById('pd-minimo').value) || 0;
+      var custo = parseFloat(document.getElementById('pd-custo').value) || 0;
+      var venda = parseFloat(document.getElementById('pd-venda').value) || 0;
+      var editId = document.getElementById('pd-editid').value;
+      if(!nome){ alert('Informe o nome do produto.'); return; }
+
+      var btn = this; btn.disabled = true;
+      try{
+        if(editId){
+          var r = await sb.from('produtos').update({nome:nome, categoria:categoria, estoque:estoque, minimo:minimo, custo:custo, venda:venda}).eq('id', editId).select().single();
+          if(r.error) throw r.error;
+          var item = produtos.find(function(x){ return x.id === editId; });
+          if(item) Object.assign(item, mapProduto(r.data));
+        } else {
+          var r2 = await sb.from('produtos').insert({nome:nome, categoria:categoria, estoque:estoque, minimo:minimo, custo:custo, venda:venda}).select().single();
+          if(r2.error) throw r2.error;
+          produtos.push(mapProduto(r2.data));
+        }
+        resetProdutoForm();
+        form.classList.remove('open');
+        renderProdutos();
+        renderDashboard();
+      }catch(e){
+        alert('Erro ao salvar produto: ' + ((e && e.message) || 'tente novamente.'));
+      }finally{
+        btn.disabled = false;
+      }
+    });
+  }
+  function resetProdutoForm(){
+    document.getElementById('pd-nome').value='';
+    document.getElementById('pd-categoria').value='Insumo de limpeza';
+    document.getElementById('pd-estoque').value='';
+    document.getElementById('pd-minimo').value='';
+    document.getElementById('pd-custo').value='';
+    document.getElementById('pd-venda').value='';
+    document.getElementById('pd-editid').value='';
+  }
+  function editarProduto(id){
+    var item = produtos.find(function(x){ return x.id === id; });
+    if(!item) return;
+    document.getElementById('pd-nome').value = item.nome;
+    document.getElementById('pd-categoria').value = item.categoria;
+    document.getElementById('pd-estoque').value = item.estoque;
+    document.getElementById('pd-minimo').value = item.minimo;
+    document.getElementById('pd-custo').value = item.custo;
+    document.getElementById('pd-venda').value = item.venda;
+    document.getElementById('pd-editid').value = item.id;
+    document.getElementById('form-produto').classList.add('open');
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+  async function excluirProduto(id){
+    if(!confirm('Excluir este produto?')) return;
+    try{
+      var r = await sb.from('produtos').delete().eq('id', id);
+      if(r.error) throw r.error;
+      produtos = produtos.filter(function(x){ return x.id !== id; });
+      renderProdutos();
+      renderDashboard();
+    }catch(e){
+      alert('Erro ao excluir: ' + ((e && e.message) || 'tente novamente.'));
+    }
+  }
+  function renderProdutos(){
+    var tbody = document.getElementById('tbl-produtos');
+    if(produtos.length === 0){
+      tbody.innerHTML = '<tr><td colspan="6" class="empty">Nenhum produto cadastrado ainda.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = produtos.map(function(p){
+      var rowClass = '';
+      var tag = '<span class="tag ok">OK</span>';
+      if(p.estoque <= 0){ rowClass = 'out-stock'; tag = '<span class="tag bad">Zerado</span>'; }
+      else if(p.estoque <= p.minimo){ rowClass = 'low-stock'; tag = '<span class="tag warn">Baixo</span>'; }
+      return '<tr class="' + rowClass + '">' +
+        '<td>' + escapeHtml(p.nome) + '<br><span style="font-size:12px;">' + tag + '</span></td>' +
+        '<td>' + escapeHtml(p.categoria) + '</td>' +
+        '<td class="num">' + p.estoque + ' <span style="color:var(--text-faint);">/ mín ' + p.minimo + '</span></td>' +
+        '<td class="num">' + brl(p.custo) + '</td>' +
+        '<td class="num">' + (p.venda ? brl(p.venda) : '—') + '</td>' +
+        '<td style="text-align:right;white-space:nowrap;">' +
+          '<button class="btn btn-ghost btn-sm" onclick="LJ.editarProduto(\'' + p.id + '\')">Editar</button>' +
+          '<button class="btn btn-ghost btn-sm btn-danger" onclick="LJ.excluirProduto(\'' + p.id + '\')">Excluir</button>' +
+        '</td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  // ---------- CAIXA ----------
+  var caixaTipo = 'entrada';
+
+  function populaSelectServicos(){
+    var sel = document.getElementById('cx-servico');
+    sel.innerHTML = '<option value="">Nenhum</option>' + servicos.map(function(s){
+      return '<option value="' + s.id + '">' + escapeHtml(s.nome) + ' — ' + brl(s.preco) + '</option>';
+    }).join('');
+  }
+  function populaCategoriasCaixa(){
+    var sel = document.getElementById('cx-categoria');
+    var lista = caixaTipo === 'entrada' ? CATEGORIAS_ENTRADA : CATEGORIAS_SAIDA;
+    sel.innerHTML = lista.map(function(c){ return '<option>' + c + '</option>'; }).join('');
+  }
+
+  function setupCaixaForm(){
+    populaSelectServicos();
+    populaCategoriasCaixa();
+
+    var form = document.getElementById('form-caixa');
+    document.getElementById('btn-toggle-caixa-form').addEventListener('click', function(){
+      resetCaixaForm();
+      form.classList.toggle('open');
+    });
+    document.getElementById('btn-cancelar-caixa').addEventListener('click', function(){
+      form.classList.remove('open');
+    });
+
+    document.getElementById('tt-entrada').addEventListener('click', function(){
+      caixaTipo = 'entrada';
+      atualizaTipoVisual();
+    });
+    document.getElementById('tt-saida').addEventListener('click', function(){
+      caixaTipo = 'saida';
+      atualizaTipoVisual();
+    });
+
+    document.getElementById('cx-servico').addEventListener('change', function(){
+      var id = this.value;
+      if(id){
+        var serv = servicos.find(function(x){ return x.id === id; });
+        if(serv){
+          document.getElementById('cx-valor').value = serv.preco;
+          document.getElementById('cx-descricao').value = serv.nome;
+          document.getElementById('cx-categoria').value = 'Serviço';
+        }
+      }
+    });
+
+    document.getElementById('btn-salvar-caixa').addEventListener('click', async function(){
+      var data = document.getElementById('cx-data').value || hoje();
+      var descricao = document.getElementById('cx-descricao').value.trim();
+      var categoria = document.getElementById('cx-categoria').value;
+      var forma = document.getElementById('cx-forma').value;
+      var valor = parseFloat(document.getElementById('cx-valor').value) || 0;
+      var servicoId = document.getElementById('cx-servico').value || null;
+
+      if(!descricao){ alert('Informe uma descrição.'); return; }
+      if(valor <= 0){ alert('Informe um valor maior que zero.'); return; }
+
+      var btn = this; btn.disabled = true;
+      try{
+        var r = await sb.from('caixa').insert({
+          tipo: caixaTipo, data: data, descricao: descricao,
+          categoria: categoria, forma: forma, valor: valor, servico_id: servicoId
+        }).select().single();
+        if(r.error) throw r.error;
+        caixa.push(mapCaixa(r.data));
+        resetCaixaForm();
+        form.classList.remove('open');
+        renderCaixa();
+        renderDashboard();
+      }catch(e){
+        alert('Erro ao registrar movimentação: ' + ((e && e.message) || 'tente novamente.'));
+      }finally{
+        btn.disabled = false;
+      }
+    });
+
+    document.querySelectorAll('.filter-row button').forEach(function(b){
+      b.addEventListener('click', function(){
+        document.querySelectorAll('.filter-row button').forEach(function(x){ x.classList.remove('active'); });
+        b.classList.add('active');
+        caixaFiltro = b.dataset.filter;
+        renderCaixa();
+      });
+    });
+
+    atualizaTipoVisual();
+  }
+
+  function atualizaTipoVisual(){
+    var be = document.getElementById('tt-entrada');
+    var bs = document.getElementById('tt-saida');
+    be.classList.remove('sel-in'); bs.classList.remove('sel-out');
+    if(caixaTipo === 'entrada'){ be.classList.add('sel-in'); }
+    else { bs.classList.add('sel-out'); }
+    document.getElementById('cx-servico-wrap').style.display = caixaTipo === 'entrada' ? '' : 'none';
+    populaCategoriasCaixa();
+  }
+
+  function resetCaixaForm(){
+    document.getElementById('cx-data').value = hoje();
+    document.getElementById('cx-descricao').value = '';
+    document.getElementById('cx-valor').value = '';
+    document.getElementById('cx-servico').value = '';
+    document.getElementById('cx-forma').value = 'Dinheiro';
+    caixaTipo = 'entrada';
+    atualizaTipoVisual();
+  }
+
+  async function excluirCaixa(id){
+    if(!confirm('Excluir esta movimentação?')) return;
+    try{
+      var r = await sb.from('caixa').delete().eq('id', id);
+      if(r.error) throw r.error;
+      caixa = caixa.filter(function(x){ return x.id !== id; });
+      renderCaixa();
+      renderDashboard();
+    }catch(e){
+      alert('Erro ao excluir: ' + ((e && e.message) || 'tente novamente.'));
+    }
+  }
+
+  function filtraCaixaPorPeriodo(){
+    if(caixaFiltro === 'tudo') return caixa.slice();
+    var hojeStr = hoje();
+    var limite = new Date();
+    if(caixaFiltro === 'hoje'){
+      return caixa.filter(function(c){ return c.data === hojeStr; });
+    }
+    var dias = parseInt(caixaFiltro, 10);
+    limite.setDate(limite.getDate() - dias);
+    var limiteStr = limite.toISOString().slice(0,10);
+    return caixa.filter(function(c){ return c.data >= limiteStr; });
+  }
+
+  function renderCaixa(){
+    var tbody = document.getElementById('tbl-caixa');
+    var lista = filtraCaixaPorPeriodo().slice().sort(function(a,b){ return b.data.localeCompare(a.data); });
+    if(lista.length === 0){
+      tbody.innerHTML = '<tr><td colspan="6" class="empty">Nenhuma movimentação neste período.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = lista.map(function(c){
+      var sinal = c.tipo === 'entrada' ? '+ ' : '- ';
+      var cls = c.tipo === 'entrada' ? 'in-val' : 'out-val';
+      return '<tr>' +
+        '<td class="num">' + dataBR(c.data) + '</td>' +
+        '<td>' + escapeHtml(c.descricao) + '</td>' +
+        '<td>' + escapeHtml(c.categoria) + '</td>' +
+        '<td>' + escapeHtml(c.forma) + '</td>' +
+        '<td class="num ' + cls + '">' + sinal + brl(c.valor) + '</td>' +
+        '<td style="text-align:right;">' +
+          '<button class="btn btn-ghost btn-sm btn-danger" onclick="LJ.excluirCaixa(\'' + c.id + '\')">Excluir</button>' +
+        '</td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  // ---------- DASHBOARD ----------
+  function saldoTotal(){
+    return caixa.reduce(function(acc,c){ return acc + (c.tipo === 'entrada' ? c.valor : -c.valor); }, 0);
+  }
+  function totalPorTipoEData(tipo, data){
+    return caixa.filter(function(c){ return c.tipo === tipo && c.data === data; })
+      .reduce(function(acc,c){ return acc + c.valor; }, 0);
+  }
+  function renderDashboard(){
+    var saldo = saldoTotal();
+    var hojeStr = hoje();
+    var entradasHoje = totalPorTipoEData('entrada', hojeStr);
+    var saidasHoje = totalPorTipoEData('saida', hojeStr);
+    var alertas = produtos.filter(function(p){ return p.estoque <= p.minimo; });
+
+    document.getElementById('header-saldo').textContent = brl(saldo);
+    document.getElementById('header-saldo').classList.toggle('neg', saldo < 0);
+    document.getElementById('st-saldo').textContent = brl(saldo);
+    document.getElementById('st-entradas-hoje').textContent = brl(entradasHoje);
+    document.getElementById('st-saidas-hoje').textContent = brl(saidasHoje);
+    document.getElementById('st-alertas').textContent = alertas.length;
+
+    var ultimas = caixa.slice().sort(function(a,b){ return b.data.localeCompare(a.data); }).slice(0,6);
+    var movEl = document.getElementById('dash-mov');
+    if(ultimas.length === 0){
+      movEl.innerHTML = '<div class="empty">Nenhuma movimentação registrada ainda.</div>';
+    } else {
+      movEl.innerHTML = ultimas.map(function(c){
+        var cls = c.tipo === 'entrada' ? 'in-val' : 'out-val';
+        var sinal = c.tipo === 'entrada' ? '+ ' : '- ';
+        return '<div class="mini-row"><div><div>' + escapeHtml(c.descricao) + '</div><div class="d">' + dataBR(c.data) + ' · ' + escapeHtml(c.categoria) + '</div></div><div class="num ' + cls + '">' + sinal + brl(c.valor) + '</div></div>';
+      }).join('');
+    }
+
+    var estEl = document.getElementById('dash-estoque');
+    if(alertas.length === 0){
+      estEl.innerHTML = '<div class="empty">Estoque tranquilo, nada para repor.</div>';
+    } else {
+      estEl.innerHTML = alertas.map(function(p){
+        var tag = p.estoque <= 0 ? '<span class="tag bad">Zerado</span>' : '<span class="tag warn">Baixo</span>';
+        return '<div class="mini-row"><div>' + escapeHtml(p.nome) + '<div class="d">' + p.estoque + ' em estoque · mínimo ' + p.minimo + '</div></div><div>' + tag + '</div></div>';
+      }).join('');
+    }
+  }
+
+  function escapeHtml(str){
+    return String(str).replace(/[&<>"']/g, function(m){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];
+    });
+  }
+
+  window.LJ = {
+    editarServico: editarServico,
+    excluirServico: excluirServico,
+    editarProduto: editarProduto,
+    excluirProduto: excluirProduto,
+    excluirCaixa: excluirCaixa
+  };
+
+  init();
+})();
+</script>
+</body>
+</html>
